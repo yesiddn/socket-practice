@@ -1,0 +1,28 @@
+{
+  "name": "socket-practice",
+  "version": "1.0.0",
+  "description": "Socket.io practice exercise",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "nodemon src/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yesiddn/socket-practice.git"
+  },
+  "author": "Duvan Yesid <yesidrodriguez305@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/yesiddn/socket-practice/issues"
+  },
+  "homepage": "https://github.com/yesiddn/socket-practice#readme",
+  "dependencies": {
+    "express": "^4.18.2",
+    "socket.io": "^4.7.2"
+  },
+  "devDependencies": {
+    "bufferutil": "^4.0.8",
+    "nodemon": "^3.0.1",
+    "utf-8-validate": "^5.0.10"
+  }
+}
