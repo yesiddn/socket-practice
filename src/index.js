@@ -24,8 +24,23 @@ io.on('connection', (socket) => {
 
   // socket.conn se puede detectar cualquier evento lanzado por el engine.io
   socket.conn.once('upgrade', () => {
-    console.log(`Hemos pasado de HTTP Long-Polling a ${socket.conn.transport.name}`);
-  })
+    console.log(
+      `Hemos pasado de HTTP Long-Polling a ${socket.conn.transport.name}`
+    );
+  });
+
+  // Emisión de eventos: https://socket.io/docs/v4/emitting-events/
+  // Or https://socket.io/docs/v4/emit-cheatsheet/
+  // Emisión básica
+  // socket.emit('Un nombre bien largo para un evento')
+  socket.emit('welcome', 'Bienvenido al servidor de websockets');
+
+  socket.on('server', (data) => {
+    console.log(data);
+  });
+
+  // Emisión a todos los sockets conectados (BROADCAST)
+  io.emit('everyone', `${socket.id} se ha conectado`);
 });
 
 httpServer.listen(3000, () => {

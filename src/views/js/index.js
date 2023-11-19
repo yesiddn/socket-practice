@@ -29,3 +29,17 @@ socket.io.on('reconnect', () => {
   console.log('Reconectado al servidor');
   checkSocketStatus();
 });
+
+// Receiving events: https://socket.io/docs/v4/receiving-events/
+socket.on('welcome', (msg) => {
+  text.textContent = msg;
+});
+
+const emitToServer = document.querySelector('#emit-to-server');
+emitToServer.addEventListener('click', () => {
+  socket.emit('server', 'Hola, servidor');
+});
+
+socket.on('everyone', (msg) => {
+  console.log(msg);
+});
