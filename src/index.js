@@ -10,6 +10,8 @@ const io = new Server(httpServer); // crea un servidor de websockets
 
 app.use(express.static(path.join(__dirname, 'views')));
 
+const socketsOnline = [];
+
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/views/index.html');
 });
@@ -39,8 +41,29 @@ io.on('connection', (socket) => {
     console.log(data);
   });
 
+  socketsOnline.push(socket.id);
   // Emisión a todos los sockets conectados (BROADCAST)
   io.emit('everyone', `${socket.id} se ha conectado`);
+
+  // Emisión a un socket en particular
+  socket.on('last', message => {
+    // const lastSocket = socketsOnline[socketsOnline.length - 1];
+    const lastSocket = socketsOnline.at(-1);
+    io.to(lastSocket).emit('saludar', message);
+  });
+
+  // on, once and off
+  socket.emit('on', 'Hello on! Emiting one time');
+  socket.emit('on', 'Hello on! Emiting two times');
+
+  socket.emit('once', 'Hello once! Emiting just one time');
+  socket.emit('once', 'Hello once! Emiting just one time');
+
+  socket.emit('off', 'Hello off!');
+  
+  setTimeout(() => {
+    socket.emit('off', 'Hello off!');
+  }, 3000);
 });
 
 httpServer.listen(3000, () => {

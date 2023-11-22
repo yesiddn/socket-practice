@@ -43,3 +43,32 @@ emitToServer.addEventListener('click', () => {
 socket.on('everyone', (msg) => {
   console.log(msg);
 });
+
+const emitToLast = document.querySelector('#emit-to-last');
+emitToLast.addEventListener('click', () => {
+  socket.emit('last', 'Hola, último socket');
+});
+
+socket.on('saludar', message => {
+  console.log(message);
+});
+
+// on, once and off
+socket.on('on', message => {
+  console.log(message);
+});
+
+socket.once('once', message => {
+  console.log(message);
+});
+
+const listener = () => {
+  console.log('Hello off! Turn off this listener');
+}
+
+// solo se puede si la función es nombrada
+socket.on('off', listener);
+
+setTimeout(() => {
+  socket.off('off', listener);
+}, 2000);
