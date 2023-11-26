@@ -1,41 +1,31 @@
 const socket = io();
 
-const circle = document.querySelector('#circle');
+const connectRoom1 = document.querySelector('.connect-room1');
+const connectRoom2 = document.querySelector('.connect-room2');
+const connectRoom3 = document.querySelector('.connect-room3');
 
-const drawCircle = position => {
-  circle.style.top = position.y + 'px';
-  circle.style.left = position.x + 'px';
-}
-
-const drag = e => {
-  e.preventDefault();
-  
-  const position = {
-    x: e.clientX || e.touches[0].clientX,
-    y: e.clientY || e.touches[0].clientY
-  };
-
-  drawCircle(position);
-  socket.emit('circle position', position);
-}
-
-circle.addEventListener('mousedown', e => {
-  document.addEventListener('mousemove', drag);
+connectRoom1.addEventListener('click', () => {
+  socket.emit('join room', 'room1');
 });
 
-circle.addEventListener('mouseup', e => {
-  document.removeEventListener('mousemove', drag);
+connectRoom2.addEventListener('click', () => {
+  socket.emit('join room', 'room2');
 });
 
-// Eventos táctiles
-circle.addEventListener('touchstart', e => {
-  circle.addEventListener('touchmove', drag);
+connectRoom3.addEventListener('click', () => {
+  socket.emit('join room', 'room3');
 });
 
-circle.addEventListener('touchend', e => {
-  circle.removeEventListener('touchmove', drag);
+const sendMessage = document.querySelector('.send-message');
+
+sendMessage.addEventListener('click', () => {
+  const message = prompt('Enter a message');
+  socket.emit('send message', message);
 });
 
-socket.on('move circle', position => {
-  drawCircle(position);
+socket.on('receive message', ({ message, room }) => {
+  const li = document.createElement('li');
+  li.textContent = message;
+
+  document.querySelector(`#${room}`).appendChild(li);
 });
