@@ -1,31 +1,21 @@
-const socket = io();
+const user = prompt('Please enter your username');
 
-const connectRoom1 = document.querySelector('.connect-room1');
-const connectRoom2 = document.querySelector('.connect-room2');
-const connectRoom3 = document.querySelector('.connect-room3');
+const profes = ['RetaxMaster', 'juandc', 'gndx'];
 
-connectRoom1.addEventListener('click', () => {
-  socket.emit('join room', 'room1');
-});
+let socketNamespace, group;
 
-connectRoom2.addEventListener('click', () => {
-  socket.emit('join room', 'room2');
-});
+const chat = document.querySelector('#chat');
+const namesapace = document.querySelector('#namespace');
 
-connectRoom3.addEventListener('click', () => {
-  socket.emit('join room', 'room3');
-});
+if (profes.includes(user)) {
+  // si se pone `const socket = io();` se estaria conectando al namespace por defecto 
+  socketNamespace = io('/teachers');
+  group = 'teachers';
+} else {
+  socketNamespace = io('/students');
+  group = 'students';
+}
 
-const sendMessage = document.querySelector('.send-message');
-
-sendMessage.addEventListener('click', () => {
-  const message = prompt('Enter a message');
-  socket.emit('send message', message);
-});
-
-socket.on('receive message', ({ message, room }) => {
-  const li = document.createElement('li');
-  li.textContent = message;
-
-  document.querySelector(`#${room}`).appendChild(li);
+socketNamespace.on('connect', () => {
+  namesapace.textContent = group;
 });
