@@ -23,10 +23,19 @@ const students = io.of('/students');
 
 teachers.on('connection', socket => {
   console.log(`${socket.id} connected to teachers namespace`);
+
+  socket.on('send message', data => {
+    teachers.emit('message', data);
+  });
 });
 
+// emit cheatsheet https://socket.io/docs/v4/emit-cheatsheet/
 students.on('connection', socket => {
   console.log(`${socket.id} connected to students namespace`);
+
+  socket.on('send message', data => {
+    students.emit('message', data);
+  });
 });
 
 httpServer.listen(3000);

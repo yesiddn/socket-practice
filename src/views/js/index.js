@@ -19,3 +19,23 @@ if (profes.includes(user)) {
 socketNamespace.on('connect', () => {
   namesapace.textContent = group;
 });
+
+// logica de envio de mensajes
+const sendMessage = document.querySelector('#send-message');
+sendMessage.addEventListener('click', (e) => {
+  const message = prompt('Please enter your message');
+
+  socketNamespace.emit('send message', {
+    message,
+    user
+  })
+});
+
+socketNamespace.on('message', data => {
+  const { user, message } = data;
+
+  const li = document.createElement('li');
+  li.textContent = `${user}: ${message}`;
+
+  chat.appendChild(li);
+});
