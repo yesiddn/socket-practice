@@ -1,41 +1,22 @@
-const user = prompt('Please enter your username');
+const socket = io();
 
-const profes = ['RetaxMaster', 'juandc', 'gndx'];
+const send = document.querySelector('#send');
+const disconnect = document.querySelector('#disconnect');
+const reconnect = document.querySelector('#reconnect');
 
-let socketNamespace, group;
-
-const chat = document.querySelector('#chat');
-const namesapace = document.querySelector('#namespace');
-
-if (profes.includes(user)) {
-  // si se pone `const socket = io();` se estaria conectando al namespace por defecto 
-  socketNamespace = io('/teachers');
-  group = 'teachers';
-} else {
-  socketNamespace = io('/students');
-  group = 'students';
-}
-
-socketNamespace.on('connect', () => {
-  namesapace.textContent = group;
+send.addEventListener('click', () => {
+  // control del buffer, para que no se envien eventos seguidos en caso de desconexion
+  // ❌ Mala practica no controlar el buffer
+  if (socket.connected) {
+    socket.emit('is connected', 'Esta conectado!');
+  }
 });
 
-// logica de envio de mensajes
-const sendMessage = document.querySelector('#send-message');
-sendMessage.addEventListener('click', (e) => {
-  const message = prompt('Please enter your message');
-
-  socketNamespace.emit('send message', {
-    message,
-    user
-  })
+disconnect.addEventListener('click', () => {
+  socket.disconnect();
 });
 
-socketNamespace.on('message', data => {
-  const { user, message } = data;
-
-  const li = document.createElement('li');
-  li.textContent = `${user}: ${message}`;
-
-  chat.appendChild(li);
+reconnect.addEventListener('click', () => {
+  // al reconectarse envia todos los eventos que no se enviaron por la desconexion
+  socket.connect();
 });
