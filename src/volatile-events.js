@@ -13,21 +13,10 @@ app.get('/', (req, res) => {
   res.sendFile(__dirname + '/views/index.html');
 });
 
-// middleware de autenticación
-io.use((socket, next) => {
-  const token = socket.handshake.auth.token;
-
-  if (token === 'my-secret-token') {
-    next();
-  } else {
-    const err = new Error('unauthorized');
-    err.data = { details: 'You cannot be authenticated' }; // additional details
-    next(err);
-  }
-});
-
 io.on('connection', (socket) => {
-  console.log(socket.id);
+  socket.on('circle position', (position) => {
+    socket.broadcast.emit('move circle', position);
+  });
 });
 
-httpServer.listen(3000);
+httpServer.listen(80);
