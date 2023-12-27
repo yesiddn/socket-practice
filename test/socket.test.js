@@ -9,7 +9,7 @@ describe('Testing Socket.io', () => {
   // Antes de empezar a hacer los test, creamos el servidos usando el callback de beforeAll
   beforeAll((done) => {
     const httpServer = createServer();
-    const io = new Server(httpServer);
+    io = new Server(httpServer);
 
     httpServer.listen(() => {
       const port = httpServer.address().port;
@@ -29,5 +29,34 @@ describe('Testing Socket.io', () => {
   afterAll(() => {
     io.close();
     clientSocket.close();
-  }); 
+  });
+
+  // la funcion test recibe como primer parametro el nombre del test y como segundo parametro una funcion que contiene el test que se va a ejecutar
+  test('Test event', (done) => {
+    clientSocket.on('greeting', (greet) => {
+      try {
+        expect(greet).toBe('Hello World');
+        done();
+      } catch (error) {
+        done(error);
+      } // evita que el test se quede colgado y asi se puede ver el error especifico
+    });
+
+    serverSocket.emit('greeting', 'Hello World');
+  });
+
+  test('Testing callbacks (acknowledgements)', done => {
+    serverSocket.on('bark', callback => {
+      callback('woof!'); // se pasa como parametro del callback un sonido y en el callback se verifica que el sonido sea el esperado
+    });
+
+    clientSocket.emit('bark', sound => {
+      try {
+        expect(sound).toBe('woof!');
+        done();
+      } catch (error) {
+        done(error);
+      }
+    }); // se envia un callback como parametro para que el servidor lo ejecute
+  });
 });
