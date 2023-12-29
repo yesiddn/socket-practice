@@ -5,6 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/chat.css">
   <title>Real chat!</title>
 </head>
 
@@ -12,6 +13,32 @@
   <header>
     <h1>Real chat</h1>
   </header>
+
+  <main>
+
+    <div id="all-messages">
+      <div class="message">
+        <div class="image-container">
+          <img src="/images/michi.jpeg" alt="Profile phto">
+        </div>
+
+        <div class="message-body">
+          <div class="user-info">
+            <span class="username">Pepito</span>
+            <span class="time">Hace 1 segundo</span>
+
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Error, cumque! Deleniti, inventore omnis reprehenderit nobis ipsam, sed maxime fuga exercitationem consequuntur corrupti voluptatum eveniet ut ab, nemo labore quam ipsa.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="send-message">
+      <input type="text" id="message">
+      <button type="button" id="send-message" class="btn secondary">Enviar</button>
+    </div>
+
+  </main>
 
   <script src="/socket.io/socket.io.js"></script>
   <script src="js/script.js"></script>
